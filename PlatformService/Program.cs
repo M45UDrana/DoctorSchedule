@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("InMem"));
 
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>()
+.ConfigurePrimaryHttpMessageHandler(() => 
+{
+    var handler = new HttpClientHandler();
+    handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+    handler.ServerCertificateCustomValidationCallback = 
+        (httpRequestMessage, cert, cetChain, policyErrors) => true;
+    return handler;
+});
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
