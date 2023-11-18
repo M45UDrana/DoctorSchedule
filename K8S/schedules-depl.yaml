@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedules-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduleservice
+  template:
+    metadata:
+      labels:
+        app: scheduleservice
+    spec:
+      containers:
+        - name: scheduleservice
+          image: m45udrana/scheduleservice:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schedules-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: scheduleservice
+  ports:
+  - name: scheduleservice
+    protocol: TCP
+    port: 80
+    targetPort: 80
