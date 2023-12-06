@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ScheduleService.AsyncDataServices;
 using ScheduleService.Core.Abstractions.Repositories;
 using ScheduleService.Data;
 using ScheduleService.Data.Repositories;
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();

@@ -8,9 +8,12 @@ namespace ScheduleService.Core.Profiles
     {
         public SchedulesProfile()
         {
-            // Source -> Target
+            // Source -> Destination
+            CreateMap<Doctor, DoctorReadDto>();
+            CreateMap<DoctorCreateDto, Doctor>();
             CreateMap<Schedule, ScheduleReadDto>();
             CreateMap<ScheduleCreateDto, Schedule>();
+            CreateMap<ScheduleReadDto, SchedulePublishedDto>();
         }
     }
 }

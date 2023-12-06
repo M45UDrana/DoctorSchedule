@@ -8,10 +8,12 @@ namespace AppointmentService.Core.Profiles
     {
         public AppointmentProfile()
         {
-            // Source -> Target
+            // Source -> Destination
             CreateMap<Schedule, ScheduleReadDto>();
             CreateMap<AppointmentCreateDto, Appointment>();
             CreateMap<Appointment, AppointmentCreateDto>();
+            CreateMap<SchedulePublishedDto, Schedule>()
+                .ForMember(dest => dest.ExternalID, opt => opt.MapFrom(src => src.Id));
         }
     }
 }
