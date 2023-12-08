@@ -14,6 +14,8 @@ namespace ScheduleService.Core.Profiles
             CreateMap<Schedule, ScheduleReadDto>();
             CreateMap<ScheduleCreateDto, Schedule>();
             CreateMap<ScheduleReadDto, SchedulePublishedDto>();
+            CreateMap<Schedule, GrpcScheduleModel>()
+                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src =>src.Id));
         }
     }
 }

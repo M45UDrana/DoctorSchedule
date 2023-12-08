@@ -3,6 +3,7 @@ using ScheduleService.AsyncDataServices;
 using ScheduleService.Core.Abstractions.Repositories;
 using ScheduleService.Data;
 using ScheduleService.Data.Repositories;
+using ScheduleService.SyncDataServices.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -37,5 +39,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<GrpcScheduleService>();
+app.MapGet("/protos/Schedules.proto", async context =>
+{
+    await context.Response.WriteAsync(File.ReadAllText("Protos/Schedules.proto"));
+});
 
 app.Run();

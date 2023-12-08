@@ -12,7 +12,7 @@ namespace AppointmentService.Core.Models
         public int ExternalID { get; set; }
 
         [Required]
-        public int DoctorName { get; set; }
+        public string DoctorName { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
