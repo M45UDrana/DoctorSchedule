@@ -45,6 +45,11 @@ namespace ScheduleService.Data.Repositories
             return _context.Doctors.Any(doc => doc.Id == doctorId);
         }
 
+        public string GetDoctorNameById(int id)
+        {
+            return _context.Doctors.FirstOrDefault(doc => doc.Id == id).Name;
+        }
+
         public bool SaveChanges()
         {
             return _context.SaveChanges() >= 0;

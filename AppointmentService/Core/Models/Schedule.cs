@@ -12,10 +12,9 @@ namespace AppointmentService.Core.Models
         public int ExternalID { get; set; }
 
         [Required]
-        public int DoctorName { get; set; }
+        public string DoctorName { get; set; }
 
-        [Required]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.Now; //TODO -> using Google.Protobuf.WellKnownTypes;
 
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }

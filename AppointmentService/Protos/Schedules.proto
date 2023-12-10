@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "ScheduleService";
+
+service GrpcSchedule {
+    rpc GetAllSchedules (GetAllRequest) returns (ScheduleResponse);
+}
+
+message GetAllRequest {}
+
+message GrpcScheduleModel{
+    int32 scheduleId = 1;
+    string DoctorName = 2;
+}
+
+message ScheduleResponse {
+    repeated GrpcScheduleModel schedule = 1;
+}

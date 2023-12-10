@@ -1,5 +1,8 @@
+using AppointmentService.AsyncDataServices;
 using AppointmentService.Core.Abstractions.Repositories;
 using AppointmentService.Data;
+using AppointmentService.EventProcessing;
+using AppointmentService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 using ScheduleService.Data.Repositories;
 
@@ -17,6 +20,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IScheduleDataClient, ScheduleDataClient>();
+builder.Services.AddHostedService<MessageBusSubscriber>();
+builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 
 var app = builder.Build();
 

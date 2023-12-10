@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ScheduleService.AsyncDataServices;
 using ScheduleService.Core.Abstractions.Repositories;
 using ScheduleService.Core.Dtos;
 using ScheduleService.Core.Models;
@@ -12,11 +13,13 @@ namespace ScheduleService.Controllers
     {
         private readonly IScheduleRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IMessageBusClient _messageBusClient;
 
-        public ScheduleController(IScheduleRepository repository, IMapper mapper)
+        public ScheduleController(IScheduleRepository repository, IMapper mapper, IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet]
@@ -65,6 +68,19 @@ namespace ScheduleService.Controllers
             _repository.SaveChanges();
 
             var scheduleReadDto = _mapper.Map<ScheduleReadDto>(schedule);
+
+            //Send Async Message
+            try
+            {
+                var schedulePublishedDto = _mapper.Map<SchedulePublishedDto>(scheduleReadDto);
+                schedulePublishedDto.DoctorName = _repository.GetDoctorNameById(doctorId);
+                schedulePublishedDto.Event = "Schedule_Published";
+                _messageBusClient.PublishNewSchedule(schedulePublishedDto);
+            }
+            catch
+            {
+                throw new Exception();
+            }
 
             return CreatedAtRoute(nameof(GetScheduleForDoctor),
                 new { doctorId, scheduleId = scheduleReadDto.Id}, scheduleReadDto);
