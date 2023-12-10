@@ -73,7 +73,7 @@ namespace ScheduleService.Controllers
             try
             {
                 var schedulePublishedDto = _mapper.Map<SchedulePublishedDto>(scheduleReadDto);
-                schedulePublishedDto.DoctorName = "Add Doctor Name By Id"; //TODO
+                schedulePublishedDto.DoctorName = _repository.GetDoctorNameById(doctorId);
                 schedulePublishedDto.Event = "Schedule_Published";
                 _messageBusClient.PublishNewSchedule(schedulePublishedDto);
             }

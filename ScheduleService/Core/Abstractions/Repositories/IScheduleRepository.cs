@@ -9,6 +9,7 @@ namespace ScheduleService.Core.Abstractions.Repositories
         IEnumerable<Schedule> GetSchedulesForDoctor(int doctorId);
         IEnumerable<Schedule> GetAllSchedules();
         bool DoctorExits(int doctorId);
+        string GetDoctorNameById(int id);
         bool SaveChanges();
     }
 }
